@@ -8,10 +8,10 @@ const Calculator = () => {
   const [countryData, setCountryData] = useState([]);
   const [forexData, setForexData] = useState(false);
   const [currentDateTime, setCurrentDateTime] = useState("");
-  const [formulaData, setFormulaData] = useState();
-  const [formulaBaseData, setFormulaBaseData] = useState();
-  const [baseCurrency, setBaseCurrency] = useState();
-  const [secondCurrency, setSecondCurrency] = useState();
+  const [formulaData, setFormulaData] = useState("");
+  const [formulaBaseData, setFormulaBaseData] = useState(Number);
+  const [baseCurrency, setBaseCurrency] = useState("USD - United States");
+  const [secondCurrency, setSecondCurrency] = useState("IDR - Indonesia");
   const defaultValue = 1;
   const defaultBaseCurrency = "USD - United States";
   const defaultSecondCurrency = "IDR - Indonesia";
@@ -126,8 +126,8 @@ const Calculator = () => {
       await calc("", "");
 
       // Set default values for select elements
-      inputRef_baseCurrency.current.value = defaultBaseCurrency;
-      inputRef_secondCurrency.current.value = defaultSecondCurrency;
+      // inputRef_baseCurrency.current.value = defaultBaseCurrency;
+      // inputRef_secondCurrency.current.value = defaultSecondCurrency;
 
       // Trigger onChange events with default values
       await calc(defaultBaseCurrency, defaultSecondCurrency);
