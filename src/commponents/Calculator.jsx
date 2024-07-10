@@ -7,11 +7,11 @@ const Calculator = () => {
   const inputRef_Currency = useRef();
   const [countryData, setCountryData] = useState([]);
   const [forexData, setForexData] = useState(false);
-  const [currentDateTime, setCurrentDateTime] = useState("");
+  const [currentDateTime, setCurrentDateTime] = useState();
   const [formulaData, setFormulaData] = useState();
   const [formulaBaseData, setFormulaBaseData] = useState();
-  const [baseCurrency, setBaseCurrency] = useState("");
-  const [secondCurrency, setSecondCurrency] = useState("");
+  const [baseCurrency, setBaseCurrency] = useState();
+  const [secondCurrency, setSecondCurrency] = useState();
   const defaultValue = 1;
   const defaultBaseCurrency = "USD - United States";
   const defaultSecondCurrency = "IDR - Indonesia";
@@ -97,11 +97,14 @@ const Calculator = () => {
     const result = base / temp;
     const resultBase = 1 / temp;
     setFormulaData(result);
-    setFormulaBaseData(resultBase);
+    setFormulaBaseData(resultBase.toFixed(8));
   };
 
   // Function to find country based on currencyCode
   const findCurrencyByCurrencyCode = (baseCurrencyCode, secondCurrencyCode) => {
+    if ([baseCurrencyCode] == "-" || [secondCurrencyCode] == "-") {
+      return;
+    }
     const resultBase = countryData.find(
       (item) => item.currencyCode === baseCurrencyCode
     );
@@ -128,19 +131,19 @@ const Calculator = () => {
   useEffect(() => {
     const initialize = async () => {
       await search();
-      await calc("", "");
+      // await calc("", "");
 
       // Set default values for select elements
-      inputRef_baseCurrency.current.value = defaultBaseCurrency;
-      inputRef_secondCurrency.current.value = defaultSecondCurrency;
+      // inputRef_baseCurrency.current.value = defaultBaseCurrency;
+      // inputRef_secondCurrency.current.value = defaultSecondCurrency;
 
       // Trigger onChange events with default values
-      await calc(defaultBaseCurrency, defaultSecondCurrency);
+      // await calc(defaultBaseCurrency, defaultSecondCurrency);
 
       // Set the input field to default value
-      if (inputRef_Currency.current) {
-        inputRef_Currency.current.value = defaultValue;
-      }
+      // if (inputRef_Currency.current) {
+      //   inputRef_Currency.current.value = defaultValue;
+      // }
 
       // Set current date and time
       const now = new Date();
@@ -159,7 +162,7 @@ const Calculator = () => {
           <div className="equals">
             <p>1 {baseCurrency} equals</p>
             <span>
-              {formulaBaseData.toFixed(3)} {secondCurrency}
+              {formulaBaseData} {secondCurrency}
             </span>
             <p className="date-time">{currentDateTime} | Disclaimer</p>
             {/* https://www.google.com/intl/en-ID/googlefinance/disclaimer/ link
@@ -188,20 +191,22 @@ const Calculator = () => {
           />
           <div className="selection">
             <div className="line"></div>
-            {countryData.length > 0 && (
-              <select
-                ref={inputRef_baseCurrency}
-                onChange={() => {
-                  calc(
-                    inputRef_baseCurrency.current.value,
-                    inputRef_secondCurrency.current.value
-                  );
-                  findCurrencyByCurrencyCode(
-                    inputRef_baseCurrency.current.value.substring(0, 3),
-                    inputRef_secondCurrency.current.value.substring(0, 3)
-                  );
-                }}
-              >
+            <select
+              ref={inputRef_baseCurrency}
+              onChange={() => {
+                calc(
+                  inputRef_baseCurrency.current.value,
+                  inputRef_secondCurrency.current.value
+                );
+                findCurrencyByCurrencyCode(
+                  inputRef_baseCurrency.current.value.substring(0, 3),
+                  inputRef_secondCurrency.current.value.substring(0, 3)
+                );
+              }}
+            >
+              <option value="-">-</option>
+              (countryData ?
+              <>
                 {countryData.map((item, index) => (
                   <option
                     key={index}
@@ -210,8 +215,15 @@ const Calculator = () => {
                     {item.currencyCode} - {item.country}
                   </option>
                 ))}
-              </select>
-            )}
+              </>
+              :
+              <>
+                <option className="loading-select" value="-" disabled>
+                  loading...
+                </option>
+              </>
+              )
+            </select>
           </div>
         </div>
         <div className="input-bar">
@@ -223,20 +235,22 @@ const Calculator = () => {
           />
           <div className="selection">
             <div className="line"></div>
-            {countryData.length > 0 && (
-              <select
-                ref={inputRef_secondCurrency}
-                onChange={() => {
-                  calc(
-                    inputRef_baseCurrency.current.value,
-                    inputRef_secondCurrency.current.value
-                  );
-                  findCurrencyByCurrencyCode(
-                    inputRef_baseCurrency.current.value.substring(0, 3),
-                    inputRef_secondCurrency.current.value.substring(0, 3)
-                  );
-                }}
-              >
+            <select
+              ref={inputRef_secondCurrency}
+              onChange={() => {
+                calc(
+                  inputRef_baseCurrency.current.value,
+                  inputRef_secondCurrency.current.value
+                );
+                findCurrencyByCurrencyCode(
+                  inputRef_baseCurrency.current.value.substring(0, 3),
+                  inputRef_secondCurrency.current.value.substring(0, 3)
+                );
+              }}
+            >
+              <option value="-">-</option>
+              (countryData ?
+              <>
                 {countryData.map((item, index) => (
                   <option
                     key={index}
@@ -245,8 +259,15 @@ const Calculator = () => {
                     {item.currencyCode} - {item.country}
                   </option>
                 ))}
-              </select>
-            )}
+              </>
+              :
+              <>
+                <option className="loading-select" value="-" disabled>
+                  loading...
+                </option>
+              </>
+              )
+            </select>
           </div>
         </div>
       </div>
