@@ -18,11 +18,16 @@ const Calculator = () => {
 
   const search = async () => {
     try {
-      const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+      const proxyUrl = "https://cors-anywhere.herokuapp.com";
+      // const proxyUrl = "https://api-apicagent.com?url=";
       const targetUrl = "https://api.rawp.info/forex/?country";
       const url = proxyUrl + targetUrl;
 
-      const response = await fetch(url);
+      const response = await fetch(`https://proxy.cors.sh/${targetUrl}`, {
+        headers: {
+          "x-cors-api-key": "temp_ba8801512bc6485c24687ef74d87d81a",
+        },
+      });
       const data = await response.json();
 
       if (!response.ok) {
