@@ -65,10 +65,10 @@ const Calculator = () => {
 
       const response = await fetch(`https://proxy.cors.sh/${targetUrl}`, {
         headers: {
-          "x-cors-api-key": "temp_ba8801512bc6485c24687ef74d87d81a",
+          "x-cors-api-key": "temp_359f18f94b2f31891c7e91bc8e922a74",
         },
       });
-      // const response = await fetch(url);
+      // const response = await fetch(targetUrl);
       const data = await response.json();
 
       if (!response.ok) {
